@@ -1,4 +1,4 @@
-__author__ = 'Ilyess AMARA'
+__author__ = 'Ilyess Amara'
 
 class Case:
     """
@@ -8,6 +8,7 @@ class Case:
         contenu (str): Le contenu de la case (" ", "O" ou "X").
 
     """
+    contenu = " "
 
     def __init__(self, contenu):
         """

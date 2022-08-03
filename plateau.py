@@ -1,9 +1,7 @@
-__authors__ = "Ilyess AMARA"
-
-
+__authors__ = "ILyess AMARA"
 
 from case import Case
-from random import randrange
+import random
 
 class Plateau:
     """
@@ -13,6 +11,7 @@ class Plateau:
         cases (dictionary): Dictionnaire de cases. La clé est une position (ligne, colonne),
                             et la valeur est une instance de la classe Case.
     """
+    cases = {}
 
     def __init__(self):
         """
@@ -68,6 +67,7 @@ class Plateau:
             else:
                 s += "\n +---+---+---+"
         return s
+        
 
     def non_plein(self):
         """
@@ -77,12 +77,20 @@ class Plateau:
         Returns:
             bool: True si le plateau n'est pas plein, False autrement.
         """
-        ok=False
-        for cle in self.cases:
-            if(self.cases[cle].contenu==" "):
-                ok=True
-                return True
+        ok = False
+        vide = 0
+        for i in range (0,3):
+            for j in range (0,3):
+                if (self.cases[(i,j)].contenu == " "):
+                    vide += 1
+
+        if(vide != 0):
+            ok = True
+        else:
+            ok = False
+
         return ok
+        
 
     def position_valide(self, ligne, colonne):
         """
@@ -97,10 +105,12 @@ class Plateau:
         Returns:
             bool: True si la position est valide, False autrement.
         """
-        assert isinstance(ligne, int), "Plateau: ligne doit être un entier."
-        assert isinstance(colonne, int), "Plateau: colonne doit être un entier."
+        assert isinstance(int(ligne), int), "Plateau: ligne doit être un entier."
+        assert isinstance(int(colonne), int), "Plateau: colonne doit être un entier."
 
-        return self.cases[(ligne,colonne)].est_vide()
+        return self.cases[(int(ligne),int(colonne))].est_vide()
+        
+        
 
     def selectionner_case(self, ligne, colonne, pion):
         """
@@ -118,7 +128,8 @@ class Plateau:
         assert isinstance(pion, str), "Plateau: pion doit être une chaîne de caractères."
         assert pion in ["O", "X"], "Plateau: pion doit être 'O' ou 'X'."
 
-        self.cases[(ligne,colonne)].contenu=pion
+        self.cases[(ligne,colonne)].contenu = pion
+       
 
 
     def est_gagnant(self, pion):
@@ -136,18 +147,235 @@ class Plateau:
         assert isinstance(pion, str), "Plateau: pion doit être une chaîne de caractères."
         assert pion in ["O", "X"], "Plateau: pion doit être 'O' ou 'X'."
 
-        return False
-        """(((cases[(0,0)].est_pion(pion)) and (cases[(0,1)].est_pion(pion)) and (cases[(0,2)].est_pion(pion)))or
-                ((cases[(1,0)].est_pion(pion)) and (cases[(1,1)].est_pion(pion)) and (cases[(1,2)].est_pion(pion)))or
-                ((cases[(2,0)].est_pion(pion)) and (cases[(2,1)].est_pion(pion)) and (cases[(2,2)].est_pion(pion)))or
+        check = 0
+        win = False
 
-                ((cases[(0,0)].est_pion(pion)) and (cases[(1,0)].est_pion(pion)) and (cases[(2,0)].est_pion(pion)))or
-                ((cases[(0,1)].est_pion(pion)) and (cases[(1,1)].est_pion(pion)) and (cases[(2,1)].est_pion(pion)))or
-                ((cases[(0,2)].est_pion(pion)) and (cases[(1,2)].est_pion(pion)) and (cases[(2,2)].est_pion(pion)))or
+        c1 = False
+        c2 = False
+        c3 = False
+       
+        """ 1 ere case """
+        for i in range(0,3):
+            for j in range(0,3):
+                if (self.cases[(i,j)].contenu == pion):
+                    check += 1
 
-                ((cases[(0,0)].est_pion(pion)) and (cases[(1,1)].est_pion(pion)) and (cases[(2,2)].est_pion(pion)))or
-                ((cases[(0,2)].est_pion(pion)) and (cases[(1,1)].est_pion(pion)) and (cases[(2,0)].est_pion(pion))))"""
+            if(check == 3):
+                win = True
+                c1 = True
+                c2 = True
+                c3 = True
+                break
+            else:
+                check = 0
+                win = False
+                
+        """ 2eme case """
+        
+        if( c1 == False ):
+            for i in range(0,3):
+                for j in range(0,3):
+                    if (self.cases[(j,i)].contenu == pion):
+                        check += 1
 
+                if(check == 3):
+                    win = True
+                    c1 = True
+                    c2 = True
+                    c3 = True
+                    break
+                else:
+                    check = 0
+                    win = False
+                    
+        """ 3eme case """
+        
+        if (c2 == False):
+            i=0
+            j=0
+
+            while((i<=2) and (j<=2)):
+                
+                if(self.cases[(j,i)].contenu == pion):
+                    check += 1
+                    i+=1
+                    j+=1
+                else:
+                    i+=1
+                    j+=1
+                
+            if(check == 3):
+                win = True
+                c1 = True
+                c2 = True
+                c3 = True
+            else:
+                check = 0
+                win = False
+
+        """ 4eme case """
+        
+        if (c3 == False):
+            i=0
+            j=2
+
+            while((i<=2) and (j>=0)):
+                
+                if(self.cases[(j,i)].contenu == pion):
+                    check += 1
+                    i+=1
+                    j-=1
+                else:
+                    i+=1
+                    j-=1
+                
+            if(check == 3):
+                win = True
+                c1 = True
+                c2 = True
+                c3 = True
+            else:
+                check = 0
+                win = False
+                
+        
+        return win
+    
+    def cas_general(self,pion):
+        ligne = 0
+        colonne = 0
+        
+        c=0
+        vide=0
+        vide_l=0
+        vide_c=0
+
+        case1 =False
+        case2 = False
+        case3 = False
+        """------ First Case ------"""
+        
+        for i in range (0,3):
+            for j in range (0,3):
+                if( self.cases[(i,j)].est_pion(pion) ):
+                    c += 1
+                if ( self.cases[(i,j)].est_vide() ):
+                    vide +=1
+                    vide_l = i
+                    vide_c = j
+            if( (c ==2) and (vide == 1) ):
+
+                case1 =True
+                case2 = True
+                case3 = True
+                ligne = vide_l
+                colonne = vide_c
+                break
+            else:
+                c = 0
+                vide = 0
+                vide_l = 0
+                vide_c = 0
+        
+        if( case1 == False ):
+            """------ 2eme cas ------"""
+            
+            for i in range (0,3):
+                for j in range (0,3):
+                    if( self.cases[(j,i)].est_pion(pion) ):
+                        c += 1
+                    if ( self.cases[(j,i)].est_vide() ):
+                        vide +=1
+                        vide_l = j
+                        vide_c = i
+                        
+                if( (c ==2) and (vide == 1) ):
+                    case1 =True
+                    case2 = True
+                    case3 = True
+                    
+                    ligne = vide_l
+                    colonne = vide_c
+                    break
+                else:
+                    c = 0
+                    vide = 0
+                    vide_l = 0
+                    vide_c = 0
+        if (case2 == False ):
+            """------ 3eme cas ------"""
+           
+            i = 0
+            j = 0
+            while ( (i<=2) and (j<=2)):
+                if( self.cases[(i,j)].est_pion(pion) ):
+                    c += 1
+                    
+                if ( self.cases[(i,j)].est_vide() ):
+                    vide +=1
+                    vide_l = i
+                    vide_c = j
+
+                i += 1
+                j += 1
+                     
+            if( (c ==2) and (vide == 1) ):
+                case1 = True
+                case2 = True
+                case3 = True
+                    
+                ligne = vide_l
+                colonne = vide_c
+            else:
+                c = 0
+                vide = 0
+                vide_l = 0
+                vide_c = 0
+                
+        if (case3 == False ):
+            
+            """------ 4eme cas ------"""
+            
+            i = 0
+            j = 2
+            while ( (i<=2) and (j>=0)):
+                if( self.cases[(i,j)].est_pion(pion) ):
+                    c += 1
+                    
+                if ( self.cases[(i,j)].est_vide() ):
+                    vide +=1
+                    vide_l = i
+                    vide_c = j
+                    
+                    
+                i += 1
+                j -= 1
+                     
+            if( (c ==2) and (vide == 1) ):
+                ligne = vide_l
+                colonne = vide_c
+                case1 = True
+                case2 = True
+                case3 = True
+            else:
+                
+                c = 0
+                vide = 0
+                vide_l = 0
+                vide_c = 0
+                case1 = False
+                case2 = False
+                case3 = False
+                
+        if ( (case1 == False) and (case2 == False) and (case3 == False)):
+                ligne = -1
+                colonne = -1
+
+
+        return (ligne,colonne)
+
+        
+        
     def choisir_prochaine_case(self, pion):
         """
         Permet de retourner les coordonnées (ligne, colonne) de la case que l'ordinateur
@@ -170,5 +398,50 @@ class Plateau:
         """
         assert isinstance(pion, str), "Plateau: pion doit être une chaîne de caractères."
         assert pion in ["O", "X"], "Plateau: pion doit être 'O' ou 'X'."
+        ligne = -1
+        colonne = -1
+        l,c = self.cas_general(pion)
 
-        pass
+        if((l >= 0 ) and (c >=0)):
+            ligne = l
+            colonne = c
+        else:
+            if(pion == "O"):
+                l,c = self.cas_general("X")
+                if((l >= 0 ) and (c >=0)):
+                    ligne = l
+                    colonne = c
+                    print(ligne)
+                    print(colonne)
+                    
+            if(pion == "X"):
+                l,c = self.cas_general("O")
+                if((l >= 0 ) and (c >=0)):
+                    ligne = l
+                    colonne = c
+                    print(ligne)
+                    print(colonne)
+
+        if((ligne < 0) and (colonne < 0)):
+            l = random.randint(0,2)
+            c = random.randint(0,2)
+            while (self.cases[(l,c)].est_vide() == False):
+                l = random.randint(0,2)
+                c = random.randint(0,2)
+
+            ligne = l
+            colonne = c
+
+            
+        return ligne,colonne
+            
+
+            
+            
+        
+
+        
+                    
+            
+
+        
