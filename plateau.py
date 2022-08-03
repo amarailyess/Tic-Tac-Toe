@@ -1,10 +1,6 @@
-__authors__ = "Ajoutez les noms des membres de votre équipe!"
-__date__ = "Ajoutez la date de remise"
+__authors__ = "Ilyess AMARA"
 
-"""
-Ce fichier permet de...(complétez la description de ce que
-ce fichier est supposé faire !
-"""
+
 
 from case import Case
 from random import randrange

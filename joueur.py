@@ -1,7 +1,6 @@
-__author__ = 'M. Bouden'
-__date__ = "Automne 2018"
+__author__ = 'Ilyess AMARA'
 
-"""Ce fichier permet de définir la classe Joueur permettant de jouer au jeu Tic-Tac-Toe"""
+
 
 class Joueur:
     """

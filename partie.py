@@ -1,24 +1,13 @@
-__authors__ = "Ajoutez les noms des membres de votre équipe!"
-__date__ = "Ajoutez la date de remise"
+__authors__ = "Ilyess AMARA"
 
-"""Ce fichier permet de...(complétez la description de ce que
-ce fichier est supposé faire ! """
+
+
 
 from plateau import Plateau
 from joueur import Joueur
 import random
 
 class Partie:
-    """
-    Classe modélisant une partie du jeu Tic-Tac-Toe utilisant
-    un plateau et deux joueurs (deux personnes ou une personne et un ordinateur).
-
-    Attributes:
-        plateau (Plateau): Le plateau du jeu contenant les 9 cases.
-        joueurs (Joueur list): La liste des deux joueurs (initialement une liste vide).
-        joueur_courant (Joueur): Le joueur courant (initialisé à une valeur nulle: None)
-        nb_parties_nulles (int): Le nombre de parties nulles (aucun joueur n'a gagné).
-    """
 
     def __init__(self):
         """
